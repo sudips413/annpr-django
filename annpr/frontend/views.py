@@ -72,4 +72,12 @@ def display_image(request):
     return render(request, 'detections/image.html',context)
 
 def display_video(request):
-    return render(request,'detections/video.html')
+    latest_video = Video.objects.latest('id');
+    number_plate = NumberPlate.objects.all();
+    video = latest_video.videofile
+    context = {
+        'video': video,
+        'number_plate': number_plate
+    }
+
+    return render(request,'detections/video.html',context)
