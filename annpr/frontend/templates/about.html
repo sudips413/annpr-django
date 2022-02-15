@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container about-content">
+    <h3>ABOUT ANNPR</h3>
+    
+    <p>
+        ANNPR(Automatic Nepali Number Plate Recognition System) is a system designed to detect Nepali number plates from images or videos and then to recognize the number plate. In this system we used YOLOv4 Darknet model for detecting number plates as well as for character segmentation. Then the segmented characters are recognized using a CNN model. The recognized license plate number will then be recorded in a database.
+    </p>
+
+    <h3 class="mt-5">ABOUT US</h3>
+
+    <p>
+        We are students of Khwopa College of Engineering currently studying in 6th semester in Computer Engineering. This project is our minor project for 6th semester.
+    </p>
+</div>
+{% endblock %}

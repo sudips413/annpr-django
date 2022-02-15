@@ -1,38 +1,75 @@
 from django.shortcuts import render
-
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
-from .models import NumberPlate
-from .forms import ModelForm1,ModelForm2
-def index(request):
-    numb=NumberPlate.objects.all()
-    form1 = ModelForm1()  
-    context={
-        'numb':numb,
-        'form' :form1
-    }
-    return render(request,'index.html',context)
-def index(request):
-    numb=NumberPlate.objects.all()
-    form2 = ModelForm2()  
-    context={
-        'numb':numb,
-        'form' :form2
-    }
-    return render(request,'index.html',context)
+from .models import NumberPlate, Image, Video
+from .forms import ModelForm1,ImageForm, VideoForm
 
-def add(request):
+
+def index(request):
+    return render(request,'index.html')
+
+def about(request):
+    return render(request, 'about.html')
+
+def get_image(request):
+    numb=NumberPlate.objects.all()
+    form = ImageForm()  
+    context={
+        'numb':numb,
+        'form': form,
+        'title': 'Image'
+    }
+    return render(request,'upload_form.html',context)
+
+def get_video(request):
+    numb=NumberPlate.objects.all()
+    form = VideoForm()  
+    context={
+        'numb':numb,
+        'form': form,
+        'title': 'Video'
+    }
+    return render(request,'upload_form.html',context)
+
+def upload_image(request):
     if request.method == "POST":
-        form= ModelForm2(request.POST,request.FILES) 
+        form = ImageForm(request.POST,request.FILES)
+        file = request.FILES.get('img')
+        filename = file.name
+        print(filename)
+        print(file)
         if form.is_valid():
             form.save()
-    return redirect('/')
+            return redirect('display_image')
+    else:
+        return redirect('get_image')
+    
 
-# def display(request):
-#     if request.method == "POST":
-#         numb=NumberPlate.objects.all()
-#         form = ModelForm(request.POST)
-#         context={
-#             'numb':numb,
-#             'form' :form
-#     }
-#     return render(request,'index.html',context)
+def upload_video(request):
+    if request.method == "POST":
+        form = VideoForm(request.POST,request.FILES)
+        file = request.FILES.get('videofile')
+        filename = file.name
+        if filename.endswith('.mp4') or filename.endswith('.avi'):
+            print('File is a video')
+            if form.is_valid():
+                form.save()
+                return redirect('display_video')
+        else:
+            print('File not a video')
+            return redirect('get_video')
+    else:
+        return redirect('get_video')
+
+def display_image(request):
+    latest_image = Image.objects.latest('id');
+    number_plate = NumberPlate.objects.all();
+    image = latest_image.img
+    context = {
+        'image': image,
+        'number_plate': number_plate
+    }
+    return render(request, 'detections/image.html',context)
+
+def display_video(request):
+    return render(request,'detections/video.html')

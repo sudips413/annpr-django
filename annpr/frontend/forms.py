@@ -1,11 +1,16 @@
 from django import forms
-from .models import MediaFiles, NumberPlate
+from .models import NumberPlate,Image,Video
 
 class ModelForm1(forms.ModelForm):
     class Meta:
         model= NumberPlate
         fields =['number']
-class ModelForm2(forms.ModelForm):
+class ImageForm(forms.ModelForm):
     class Meta:
-        model= MediaFiles
-        fields =['img','videofile']        
+        model= Image
+        fields =['img']
+
+class VideoForm(forms.ModelForm):
+    class Meta:
+        model = Video
+        fields = ['videofile']

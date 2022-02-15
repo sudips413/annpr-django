@@ -1,0 +1,19 @@
+<h3>Records:</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Number Plate</th>
+            <th scope="col">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for num in number_plate %}
+        <tr>
+            <th scope="row">{{num.id}}</th>
+            <td>{{num.number}}</td>
+            <td>{{num.entrydate}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
