@@ -3,12 +3,13 @@
 <title>ANNPR WEB</title>
 
 </head>
-<body>
-    {% include 'includes/navbar.html' %}
-    <div class="main">
+    <body>
+        {% include 'includes/navbar.html' %}
+    
         {% block content  %}
         {% endblock  %}
-    </div> 
     
+        {% include 'includes/footer.html' %}
 
-{% include 'includes/footer.html' %}
+    </body>
+</html>

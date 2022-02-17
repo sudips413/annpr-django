@@ -1,4 +1,4 @@
-<h3>Records:</h3>
+<h3> All Records:</h3>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -8,11 +8,11 @@
         </tr>
     </thead>
     <tbody>
-        {% for num in number_plate %}
+        {% for number_plate in number_plates %}
         <tr>
-            <th scope="row">{{num.id}}</th>
-            <td>{{num.number}}</td>
-            <td>{{num.entrydate}}</td>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{number_plate.number}}</td>
+            <td>{{number_plate.entrydate}}</td>
         </tr>
         {% endfor %}
     </tbody>

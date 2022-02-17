@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from .models import NumberPlate, Image, Video
 from .forms import ModelForm1,ImageForm, VideoForm
-
+from pytorch_YOLOv4.main2 import main_annpr_detector
 
 def index(request):
     return render(request,'index.html')
@@ -34,13 +34,19 @@ def get_video(request):
 def upload_image(request):
     if request.method == "POST":
         form = ImageForm(request.POST,request.FILES)
+        numberplate = NumberPlate()
         file = request.FILES.get('img')
         filename = file.name
-        print(filename)
-        print(file)
+        # print(filename)
+        # print(file)
         if form.is_valid():
             form.save()
-            return redirect('display_image')
+            output_number = main_annpr_detector(detector='image', filename=filename)
+            # print(f'Detected Number: {output_number}')
+            numberplate.number = output_number
+            numberplate.save()
+            
+            return redirect('display_image',filename)
     else:
         return redirect('get_image')
     
@@ -61,13 +67,17 @@ def upload_video(request):
     else:
         return redirect('get_video')
 
-def display_image(request):
+def display_image(request,filename):
     latest_image = Image.objects.latest('id');
-    number_plate = NumberPlate.objects.all();
+    number_plates = NumberPlate.objects.all()[::-1];
+    current_number_plate = NumberPlate.objects.latest('id');
     image = latest_image.img
+    print(f'File: {filename}')
     context = {
         'image': image,
-        'number_plate': number_plate
+        'number_plates': number_plates,
+        'current_number': current_number_plate.number,
+        'filename': filename
     }
     return render(request, 'detections/image.html',context)
 
